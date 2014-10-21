@@ -1,8 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowBackground">@color/app_background</item>
+        <item name="android:buttonStyle">@style/BtnStyle</item>
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+    </style>
+
+    <style name="BtnStyle" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/btn_drawable</item>
+    </style>
+
+    <style name="TextViewStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/textView_default</item>
     </style>
 
 </resources>

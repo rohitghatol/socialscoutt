@@ -1,1 +1,20 @@
+*.apk
+*.ap_
+.dartignore
+.DS_Store
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+*.jar
+
+# generated files
 SocialScout/app/build
+
+.metadata/
+.idea/
+
+# Local configuration file (sdk path, etc)
+local.properties

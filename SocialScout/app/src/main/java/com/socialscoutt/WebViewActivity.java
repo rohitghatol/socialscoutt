@@ -14,9 +14,8 @@ import android.webkit.WebViewClient;
  */
 public class WebViewActivity extends Activity {
 
-    private WebView webView;
-
     public static String EXTRA_URL = "extra_url";
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
