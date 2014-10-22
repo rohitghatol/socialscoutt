@@ -1,16 +1,5 @@
 package com.socialscoutt;
 
-import java.io.InputStream;
-
-import twitter4j.StatusUpdate;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.User;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
-import twitter4j.conf.Configuration;
-import twitter4j.conf.ConfigurationBuilder;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -31,33 +20,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
-import com.parse.ParseInstallation;
-import com.parse.PushService;
+import com.socialscoutt.utils.SocialConstants;
+
+import java.io.InputStream;
+
+import twitter4j.StatusUpdate;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 
 /**
  * Created by rohitghatol on 10/4/14.
  */
 public class MainActivity extends Activity implements OnClickListener {
 
-    /* Shared preference keys */
-    private static final String PREF_NAME = "sample_twitter_pref";
-    private static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
-    private static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
-    private static final String PREF_KEY_TWITTER_LOGIN = "is_twitter_loggedin";
-    private static final String PREF_USER_NAME = "twitter_user_name";
-
     /* Any number for uniquely distinguish your request */
     public static final int WEBVIEW_REQUEST_CODE = 100;
-
-    private ProgressDialog pDialog;
-
     private static Twitter twitter;
     private static RequestToken requestToken;
-
     private static SharedPreferences mSharedPreferences;
-
+    private ProgressDialog pDialog;
     private EditText mShareEditText;
     private TextView userName;
     private View loginLayout;
@@ -72,10 +59,6 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "12rciFnh3UxUprA921LgvOIcdRxHwPfZKKM6P2GZ", "EGBBtRBfTX3AlsDN6kIWQK64VVoaWlRux5SDXqB9");
-        ParseInstallation.getCurrentInstallation().saveInBackground();
 
 		/* initializing twitter parameters from string.xml */
         initTwitterConfigs();
@@ -104,17 +87,17 @@ public class MainActivity extends Activity implements OnClickListener {
         }
 
 		/* Initialize application preferences */
-        mSharedPreferences = getSharedPreferences(PREF_NAME, 0);
+        mSharedPreferences = getSharedPreferences(SocialConstants.PREF_NAME, 0);
 
-        boolean isLoggedIn = mSharedPreferences.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
+        boolean isLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, false);
 
 		/*  if already logged in, then hide login layout and show share layout */
         if (isLoggedIn) {
             loginLayout.setVisibility(View.GONE);
             shareLayout.setVisibility(View.VISIBLE);
 
-            String username = mSharedPreferences.getString(PREF_USER_NAME, "");
-            userName.setText(getResources ().getString(com.socialscoutt.R.string.hello)
+            String username = mSharedPreferences.getString(SocialConstants.PREF_USER_NAME, "");
+            userName.setText(getResources().getString(com.socialscoutt.R.string.hello)
                     + username);
 
         } else {
@@ -152,6 +135,11 @@ public class MainActivity extends Activity implements OnClickListener {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 
     /**
      * Saving user information, after user is authenticated for the first time.
@@ -169,10 +157,10 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			/* Storing oAuth tokens to shared preferences */
             Editor e = mSharedPreferences.edit();
-            e.putString(PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
-            e.putString(PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
-            e.putBoolean(PREF_KEY_TWITTER_LOGIN, true);
-            e.putString(PREF_USER_NAME, username);
+            e.putString(SocialConstants.PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
+            e.putString(SocialConstants.PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
+            e.putBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, true);
+            e.putString(SocialConstants.PREF_USER_NAME, username);
             e.commit();
 
         } catch (TwitterException e1) {
@@ -190,7 +178,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
     private void loginToTwitter() {
-        boolean isLoggedIn = mSharedPreferences.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
+        boolean isLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, false);
 
         if (!isLoggedIn) {
             final ConfigurationBuilder builder = new ConfigurationBuilder();
@@ -291,9 +279,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
                 // Access Token
-                String access_token = mSharedPreferences.getString(PREF_KEY_OAUTH_TOKEN, "");
+                String access_token = mSharedPreferences.getString(SocialConstants.PREF_KEY_OAUTH_TOKEN, "");
                 // Access Token Secret
-                String access_token_secret = mSharedPreferences.getString(PREF_KEY_OAUTH_SECRET, "");
+                String access_token_secret = mSharedPreferences.getString(SocialConstants.PREF_KEY_OAUTH_SECRET, "");
 
                 AccessToken accessToken = new AccessToken(access_token, access_token_secret);
                 Twitter twitter = new TwitterFactory(builder.build()).getInstance(accessToken);

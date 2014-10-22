@@ -2,14 +2,19 @@
 <resources>
 
     <!-- Strings used in app ui-->
-    <string name="app_name">TwitterShare</string>
+    <string name="app_name">Social Scout</string>
     <string name="action_settings">Settings</string>
     <string name="hello">Hello, </string>
-    <string name="hello_world">Hello World </string>
-    <string name="login_instructions">Login to twiter</string>
+    <string name="login_instructions">Login to twitter</string>
+    <string name="get_your_first_social_badge">Get your first social badge</string>
+
+    <!--Hint-->
     <string name="share_instructions">Enter share message</string>
+
+    <!--Button titles-->
     <string name="btn_login">Login to Twitter</string>
     <string name="btn_share">Share</string>
+    <string name="btn_proceed">Proceed</string>
 
     <!-- Twitter Configurations -->
     <string name="twitter_callback">https://www.socialscoutt.com</string>

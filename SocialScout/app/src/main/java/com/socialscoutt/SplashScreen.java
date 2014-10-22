@@ -1,19 +1,41 @@
 package com.socialscoutt;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.socialscoutt.utils.SocialConstants;
 
 
 public class SplashScreen extends Activity {
 
+    private static SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.socialscoutt.R.layout.activity_splash_screen);
+        getActionBar().hide();
+        /* Initialize application preferences */
+        mSharedPreferences = getSharedPreferences(SocialConstants.PREF_NAME, 0);
+
+        boolean isLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, false);
+
+        if (isLoggedIn) {
+            final Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            setContentView(com.socialscoutt.R.layout.activity_splash_screen);
+        }
     }
 
+    public void onProceed(View view) {
+        final Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
