@@ -14,7 +14,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,18 +39,16 @@ import twitter4j.conf.ConfigurationBuilder;
 /**
  * Created by rohitghatol on 10/4/14.
  */
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity {
 
     /* Any number for uniquely distinguish your request */
     public static final int WEBVIEW_REQUEST_CODE = 100;
     private static Twitter twitter;
     private static RequestToken requestToken;
     private static SharedPreferences mSharedPreferences;
-    private ProgressDialog pDialog;
-    private EditText mShareEditText;
-    private TextView userName;
-    private View loginLayout;
-    private View shareLayout;
+
+    private Button twitterLoginInButton, facebookLoginButton, linkedInLoginButton;
+    private ImageView twitterLogedInImg, facebookLogedInImg, linkedInLogedInImg;
 
     private String consumerKey = null;
     private String consumerSecret = null;
@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getActionBar().hide();
 		/* initializing twitter parameters from string.xml */
         initTwitterConfigs();
 
@@ -70,14 +70,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		/* Setting activity layout file */
         setContentView(com.socialscoutt.R.layout.activity_main);
 
-        loginLayout = (RelativeLayout) findViewById(com.socialscoutt.R.id.login_layout);
-        shareLayout = (LinearLayout) findViewById(com.socialscoutt.R.id.share_layout);
-        mShareEditText = (EditText) findViewById(com.socialscoutt.R.id.share_text);
-        userName = (TextView) findViewById(com.socialscoutt.R.id.user_name);
+        twitterLoginInButton = (Button)findViewById(R.id.btn_twitter_login);
+        facebookLoginButton = (Button)findViewById(R.id.btn_facebook_login);
+        linkedInLoginButton = (Button)findViewById(R.id.btn_linkedin_login);
 
-		/* register button click listeners */
-        findViewById(com.socialscoutt.R.id.btn_login).setOnClickListener(this);
-        findViewById(com.socialscoutt.R.id.btn_share).setOnClickListener(this);
+        twitterLogedInImg = (ImageView)findViewById(R.id.twitter_loggedIn);
+        facebookLogedInImg = (ImageView)findViewById(R.id.facebook_loggedIn);
+        linkedInLogedInImg = (ImageView)findViewById(R.id.linkedin_loggedIn);
 
 		/* Check if required twitter keys are set */
         if (TextUtils.isEmpty(consumerKey) || TextUtils.isEmpty(consumerSecret)) {
@@ -88,28 +87,20 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		/* Initialize application preferences */
         mSharedPreferences = getSharedPreferences(SocialConstants.PREF_NAME, 0);
+        boolean isTwitterLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, false);
+        boolean isFacebookLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_FACEBOOK_LOGIN, false);
+        boolean isLinkedLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_LINKEDIN_LOGIN, false);
 
-        boolean isLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, false);
+        if(isTwitterLoggedIn){
+            twitterLoginInButton.setVisibility(View.GONE);
+            twitterLogedInImg.setVisibility(View.VISIBLE);
+        }else{
 
-		/*  if already logged in, then hide login layout and show share layout */
-        if (isLoggedIn) {
-            loginLayout.setVisibility(View.GONE);
-            shareLayout.setVisibility(View.VISIBLE);
-
-            String username = mSharedPreferences.getString(SocialConstants.PREF_USER_NAME, "");
-            userName.setText(getResources().getString(com.socialscoutt.R.string.hello)
-                    + username);
-
-        } else {
-            loginLayout.setVisibility(View.VISIBLE);
-            shareLayout.setVisibility(View.GONE);
-
+            twitterLoginInButton.setVisibility(View.VISIBLE);
+            twitterLogedInImg.setVisibility(View.GONE);
             Uri uri = getIntent().getData();
-
             if (uri != null && uri.toString().startsWith(callbackUrl)) {
-
                 String verifier = uri.getQueryParameter(oAuthVerifier);
-
                 try {
 
 					/* Getting oAuth authentication token */
@@ -123,15 +114,29 @@ public class MainActivity extends Activity implements OnClickListener {
 					/* save updated token */
                     saveTwitterInfo(accessToken);
 
-                    loginLayout.setVisibility(View.GONE);
-                    shareLayout.setVisibility(View.VISIBLE);
-                    userName.setText(getString(com.socialscoutt.R.string.hello) + username);
+                    final Intent intent = new Intent(this, ShareActivity.class);
+                    startActivity(intent);
 
                 } catch (Exception e) {
                     Log.e("Failed to login Twitter!!", e.getMessage());
                 }
             }
+        }
 
+        if(isFacebookLoggedIn){
+            facebookLoginButton.setVisibility(View.GONE);
+            facebookLogedInImg.setVisibility(View.VISIBLE);
+        }else {
+            facebookLoginButton.setVisibility(View.VISIBLE);
+            facebookLogedInImg.setVisibility(View.GONE);
+        }
+
+        if(isLinkedLoggedIn){
+            linkedInLoginButton.setVisibility(View.GONE);
+            linkedInLogedInImg.setVisibility(View.VISIBLE);
+        }else {
+            linkedInLoginButton.setVisibility(View.VISIBLE);
+            linkedInLogedInImg.setVisibility(View.GONE);
         }
     }
 
@@ -177,7 +182,7 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
 
-    private void loginToTwitter() {
+    public void loginToTwitter(View v) {
         boolean isLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, false);
 
         if (!isLoggedIn) {
@@ -205,9 +210,8 @@ public class MainActivity extends Activity implements OnClickListener {
                 e.printStackTrace();
             }
         } else {
-
-            loginLayout.setVisibility(View.GONE);
-            shareLayout.setVisibility(View.VISIBLE);
+            final Intent intent = new Intent(this, ShareActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -225,10 +229,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 saveTwitterInfo(accessToken);
 
-                loginLayout.setVisibility(View.GONE);
-                shareLayout.setVisibility(View.VISIBLE);
-                userName.setText(MainActivity.this.getResources().getString(
-                        com.socialscoutt.R.string.hello) + username);
+                final Intent intent = new Intent(this, ShareActivity.class);
+                startActivity(intent);
 
             } catch (Exception e) {
                 Log.e("Twitter Login Failed", e.getMessage());
@@ -238,80 +240,11 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case com.socialscoutt.R.id.btn_login:
-                loginToTwitter();
-                break;
-            case com.socialscoutt.R.id.btn_share:
-                final String status = mShareEditText.getText().toString();
-
-                if (status.trim().length() > 0) {
-                    new updateTwitterStatus().execute(status);
-                } else {
-                    Toast.makeText(this, "Message is empty!!", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
+    public void loginToFacebook(View v) {
+        Toast.makeText(this, getText(R.string.coming_soon),Toast.LENGTH_SHORT).show();
     }
 
-    class updateTwitterStatus extends AsyncTask<String, String, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setMessage("Posting to twitter...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        protected Void doInBackground(String... args) {
-
-            String status = args[0];
-            try {
-                ConfigurationBuilder builder = new ConfigurationBuilder();
-
-                builder.setOAuthConsumerKey(consumerKey);
-                builder.setOAuthConsumerSecret(consumerSecret);
-
-
-                // Access Token
-                String access_token = mSharedPreferences.getString(SocialConstants.PREF_KEY_OAUTH_TOKEN, "");
-                // Access Token Secret
-                String access_token_secret = mSharedPreferences.getString(SocialConstants.PREF_KEY_OAUTH_SECRET, "");
-
-                AccessToken accessToken = new AccessToken(access_token, access_token_secret);
-                Twitter twitter = new TwitterFactory(builder.build()).getInstance(accessToken);
-
-                // Update status
-                StatusUpdate statusUpdate = new StatusUpdate(status);
-                InputStream is = getResources().openRawResource(com.socialscoutt.R.drawable.lakeside_view);
-                statusUpdate.setMedia("test.jpg", is);
-
-                twitter4j.Status response = twitter.updateStatus(statusUpdate);
-
-                Log.d("Status", response.getText());
-
-            } catch (TwitterException e) {
-                Log.d("Failed to post!", e.getMessage());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-			/* Dismiss the progress dialog after sharing */
-            pDialog.dismiss();
-
-            Toast.makeText(MainActivity.this, "Posted to Twitter!", Toast.LENGTH_SHORT).show();
-
-            // Clearing EditText field
-            mShareEditText.setText("");
-        }
-
+    public void loginToLinkedIn(View v) {
+        Toast.makeText(this, getText(R.string.coming_soon),Toast.LENGTH_SHORT).show();
     }
 }

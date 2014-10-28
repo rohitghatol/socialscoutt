@@ -25,8 +25,12 @@ public class SplashScreen extends Activity {
         boolean isLoggedIn = mSharedPreferences.getBoolean(SocialConstants.PREF_KEY_TWITTER_LOGIN, false);
 
         if (isLoggedIn) {
-            final Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            final Intent intent = new Intent(this, ShareActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            this.finish();
+            this.startActivity(intent);
+            this.overridePendingTransition(0, 0);
         } else {
             setContentView(com.socialscoutt.R.layout.activity_splash_screen);
         }

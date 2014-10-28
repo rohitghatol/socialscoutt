@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SocialScout.iml" filepath="$PROJECT_DIR$/SocialScout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/google-play-library/google-play-library.iml" filepath="$PROJECT_DIR$/google-play-library/google-play-library.iml" />
     </modules>
   </component>
 </project>

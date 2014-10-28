@@ -15,6 +15,7 @@ SocialScout/app/build
 
 .metadata/
 .idea/
+SocialScout/google-play-library/
 
 # Local configuration file (sdk path, etc)
 local.properties

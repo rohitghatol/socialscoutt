@@ -6,68 +6,122 @@
     android:padding="@dimen/activity_vertical_margin">
 
     <RelativeLayout
-        android:id="@+id/login_layout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:id="@+id/linkImage"
+            android:src="@drawable/link_social"
+            android:scaleType="centerInside" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/linkImage"
             android:text="@string/login_instructions"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/textView_default" />
-
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/btn_login" />
+            android:textColor="@color/textView_default"
+            android:textStyle="bold|italic"/>
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/share_layout"
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center_horizontal"
+        android:progress="0" />
 
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:text="@string/hello"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/textView_default" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/lakeside_view" />
-
-        <EditText
-            android:id="@+id/share_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@color/bg_edit_text"
-            android:hint="@string/share_instructions"
-            android:inputType="textMultiLine"
-            android:minLines="5"
-            android:padding="10dp" />
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:id="@+id/twitterImage"
+            android:src="@drawable/twitter"
+            android:scaleType="centerInside" />
 
         <Button
-            android:id="@+id/btn_share"
-            android:layout_width="fill_parent"
+            android:id="@+id/btn_twitter_login"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/btn_share" />
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:text="@string/btn_twitter_login"
+            android:onClick="loginToTwitter"
+            android:layout_alignParentRight="true" />
+
+        <ImageView
+            android:id="@+id/twitter_loggedIn"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_action_accept"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:id="@+id/facebookImage"
+            android:src="@drawable/facebook"
+            android:scaleType="centerInside" />
+
+        <Button
+            android:id="@+id/btn_facebook_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/btn_facebook_login"
+            android:onClick="loginToFacebook"
+            android:layout_alignParentRight="true" />
+        <ImageView
+            android:id="@+id/facebook_loggedIn"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_action_accept"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:id="@+id/linkedInImage"
+            android:src="@drawable/linkedin"
+            android:scaleType="centerInside" />
+
+        <Button
+            android:id="@+id/btn_linkedin_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/btn_linkedIn_login"
+            android:onClick="loginToLinkedIn"
+            android:layout_alignParentRight="true" />
+        <ImageView
+            android:id="@+id/linkedin_loggedIn"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_action_accept"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
 </LinearLayout>

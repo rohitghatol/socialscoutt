@@ -4,4 +4,5 @@
     <color name="textView_default">#FF0080B4</color>
     <color name="bg_button">#FF0080B4</color>
     <color name="bg_edit_text">#FFcceaf3</color>
+    <color name="col_notification">#ffc3451d</color>
 </resources>
